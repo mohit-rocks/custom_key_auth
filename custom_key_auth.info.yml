@@ -1,0 +1,8 @@
+name: 'Custom Key Auth Plugins'
+type: module
+description: 'Provides custom authentication plugins.'
+core: 8.x
+package: "custom"
+dependencies:
+  - key
+  - migrate_plus

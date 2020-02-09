@@ -1,0 +1,60 @@
+id: import_articles
+label: Import Articles
+migration_group: articles
+migration_dependencies: {}
+dependencies:
+  module:
+    - custom_key_auth
+
+source:
+  plugin: url
+  data_fetcher_plugin: http
+  data_parser_plugin: json
+  authentication:
+    plugin: custom_api_key
+    storage: key
+    header: "X-Example-API-Key"
+    api_key: example_production_api_key
+
+  pager:
+    selector: links/next
+    type: urls
+
+  urls:
+    - https://api.example.com/sku?sort=id&page[limit]=200&page[offset]=0
+
+  ids:
+    id:
+      type: string
+
+  item_selector: data/
+
+  fields:
+    -
+      name: id
+      selector: /id
+    -
+      name: title
+      selector: /attributes/title
+    -
+      name: descriptions
+      selector: /attributes/description
+
+process:
+  uid:
+    plugin: default_value
+    default_value: 1
+
+  status:
+    plugin: default_value
+    default_value: 1
+
+  type:
+    plugin: default_value
+    default_value: article
+
+  title: title
+  body/value: description
+
+destination:
+  plugin: entity:node
